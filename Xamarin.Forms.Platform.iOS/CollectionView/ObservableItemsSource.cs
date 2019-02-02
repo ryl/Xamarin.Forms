@@ -90,4 +90,15 @@ namespace Xamarin.Forms.Platform.iOS
 
 		public object this[int index] => _itemsSource[index];
 	}
+
+	internal class BasicGroupedSource : IGroupedItemsViewSource
+	{
+		readonly IList _groupSource;
+
+		public object this[int itemIndex] => _groupSource[itemIndex];
+		public object this[int groupIndex, int itemIndex] => ((IList)_groupSource[itemIndex])[itemIndex];
+
+		public int GroupCount => _groupSource.Count;
+		public int Count { get; }
+	}
 }
