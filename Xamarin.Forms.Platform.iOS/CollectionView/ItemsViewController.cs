@@ -1,5 +1,4 @@
 ﻿using System;
-using CoreGraphics;
 using Foundation;
 using UIKit;
 
@@ -36,7 +35,7 @@ namespace Xamarin.Forms.Platform.iOS
 
 			CollectionView.Delegate = Delegator;
 
-			((UICollectionViewFlowLayout)layout).HeaderReferenceSize = new CGSize(100, 100);
+			
 		}
 
 		public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
@@ -105,7 +104,10 @@ namespace Xamarin.Forms.Platform.iOS
 
 		protected virtual IItemsViewSource CreateItemsViewSource()
 		{
-			return ItemsSourceFactory.Create(ItemsView.ItemsSource, CollectionView);
+			var x = ItemsView.ItemsSource;
+
+
+			return ItemsSourceFactory.Create(x, CollectionView);
 		}
 
 		public virtual void UpdateItemsSource()
