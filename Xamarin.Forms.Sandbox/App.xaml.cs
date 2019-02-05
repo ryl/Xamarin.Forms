@@ -12,7 +12,18 @@ namespace Xamarin.Forms.Sandbox
 		{
 			InitializeComponent();
 			Device.SetFlags(new[] { "Shell_Experimental", "Visual_Experimental", "CollectionView_Experimental" });
-			MainPage = CreateStackLayoutPage(new View[] { new DatePicker(), new TimePicker(), new Picker() { Items = { "1", "2", "3" } } });
+
+			var picker = new Picker() { TitleColor = Color.Green, Title = "I am a title", Items = { "1", "2", "3" } };
+			var button = new Button()
+			{
+				Text = "Clear",
+				Command = new Command(() =>
+				{
+					picker.SelectedItem = null;
+				})
+			};
+
+			MainPage = CreateStackLayoutPage(new View[] { new DatePicker(), new TimePicker(), picker, button, new Entry(), new Entry() { Placeholder = "I am a title" }, new Entry(), new Entry() });
 		}
 
 		ContentPage CreateStackLayoutPage(IEnumerable<View> children)

@@ -7,5 +7,6 @@
     <xamarin.forms.platform.android.material.MaterialPickerEditText
 		android:id="@+id/materialformsedittext"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-7dp"/>
 </xamarin.forms.platform.android.material.MaterialFormsTextInputLayout>

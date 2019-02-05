@@ -4,7 +4,6 @@
   <!-- Material Base Theme -->
   <style name="XamarinFormsMaterialTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
     <item name="materialButtonStyle">@style/XamarinFormsMaterialButton</item>
-    <item name="editTextStyle">@style/XamarinFormsTextInputEditTextDefaults</item>
   </style>
 
   <!-- Material Progress Bars -->
@@ -23,9 +22,5 @@
   </style>
   <style name="XamarinFormsMaterialEntryFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
     <item name="boxCollapsedPaddingTop">8dp</item>
-  </style>
-
-  <style name="XamarinFormsTextInputEditTextDefaults">
-    <item name="android:layout_marginBottom">-7dp</item>
   </style>
 </resources>

@@ -15,16 +15,16 @@ using AColor = Android.Graphics.Color;
 using AProgressBar = Android.Widget.ProgressBar;
 using AView = Android.Views.View;
 
-[assembly: ExportRenderer(typeof(Xamarin.Forms.DatePicker), typeof(MaterialDatePickerRenderer), new[] { typeof(VisualRendererMarker.Material) })]
+[assembly: ExportRenderer(typeof(Xamarin.Forms.Picker), typeof(MaterialPickerRenderer), new[] { typeof(VisualRendererMarker.Material) })]
 
 namespace Xamarin.Forms.Platform.Android.Material
 {
-	public class MaterialDatePickerRenderer : DatePickerRendererBase<MaterialFormsTextInputLayout>
+	public class MaterialPickerRenderer : PickerRendererBase<MaterialFormsTextInputLayout>
 	{
 		MaterialFormsTextInputLayout _textInputLayout;
 		MaterialPickerEditText _textInputEditText;
 
-		public MaterialDatePickerRenderer(Context context) : base(MaterialContextThemeWrapper.Create(context))
+		public MaterialPickerRenderer(Context context) : base(MaterialContextThemeWrapper.Create(context))
 		{
 		}
 
@@ -36,10 +36,14 @@ namespace Xamarin.Forms.Platform.Android.Material
 			var view = inflater.Inflate(Resource.Layout.MaterialPickerTextInput, null);
 			_textInputLayout = (MaterialFormsTextInputLayout)view;
 			_textInputEditText = _textInputLayout.FindViewById<MaterialPickerEditText>(Resource.Id.materialformsedittext);
-
+			
 			return _textInputLayout;
 		}
 
+		protected internal override void UpdatePlaceHolderText()
+		{
+			_textInputLayout.Hint = Element.Title;
+		}
 
 		protected override void UpdateBackgroundColor()
 		{
@@ -49,6 +53,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 			_textInputLayout.BoxBackgroundColor = MaterialColors.CreateEntryFilledInputBackgroundColor(Element.BackgroundColor, Element.TextColor);
 		}
 
+		protected internal override void UpdateTitleColor() => ApplyTheme();
 		protected internal override void UpdateTextColor() => ApplyTheme();
 
 		void ApplyTheme()
@@ -60,11 +65,18 @@ namespace Xamarin.Forms.Platform.Android.Material
 			var textColor = MaterialColors.GetEntryTextColor(Element.TextColor);
 			UpdateTextColor(Color.FromUint((uint)textColor.ToArgb()));
 
+			var placeHolderColors = MaterialColors.GetPlaceHolderColor(Element.TitleColor, Element.TextColor);
 			var underlineColors = MaterialColors.GetUnderlineColor(Element.TextColor);
 
 			var colors = MaterialColors.CreateEntryUnderlineColors(underlineColors.FocusedColor, underlineColors.UnFocusedColor);
 
 			ViewCompat.SetBackgroundTintList(_textInputEditText, colors);
+
+
+			if (HasFocus || !string.IsNullOrWhiteSpace(_textInputEditText.Text))
+				_textInputLayout.DefaultHintTextColor = MaterialColors.CreateEntryFilledPlaceholderColors(placeHolderColors.FloatingColor, placeHolderColors.FloatingColor);
+			else
+				_textInputLayout.DefaultHintTextColor = MaterialColors.CreateEntryFilledPlaceholderColors(placeHolderColors.InlineColor, placeHolderColors.FloatingColor);
 		}
 
 	}

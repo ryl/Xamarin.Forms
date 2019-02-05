@@ -24,7 +24,7 @@ namespace Xamarin.Forms.Platform.Android.Material
 		MaterialFormsTextInputLayout _textInputLayout;
 		MaterialPickerEditText _textInputEditText;
 
-		public MaterialTimePickerRenderer(Context context) : base(context)
+		public MaterialTimePickerRenderer(Context context) : base(MaterialContextThemeWrapper.Create(context))
 		{
 		}
 

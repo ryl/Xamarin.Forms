@@ -201,7 +201,7 @@ namespace Xamarin.Forms.Platform.Android
 
 	public class DatePickerRenderer : DatePickerRendererBase<EditText>
 	{
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use TimePickerRenderer(Context) instead.")]
+		[Obsolete("This constructor is obsolete as of version 2.5. Please use DatePickerRenderer(Context) instead.")]
 		public DatePickerRenderer()
 		{
 		}
