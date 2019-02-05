@@ -1,10 +1,9 @@
-﻿using System;
+﻿#if __ANDROID_28__
+using System;
 using Android.Content;
 using Android.Runtime;
 using Android.Support.Design.Widget;
 using Android.Util;
-using Xamarin.Forms.Platform.Android.Material;
-
 namespace Xamarin.Forms.Platform.Android.Material
 {
 	public class MaterialPickerEditText : TextInputEditText, IPopupTrigger
@@ -47,3 +46,4 @@ namespace Xamarin.Forms.Platform.Android.Material
 		}
 	}
 }
+#endif

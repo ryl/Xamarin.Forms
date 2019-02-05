@@ -163,9 +163,8 @@ namespace Xamarin.Forms.Platform.Android
 			EditText.SetTextSize(ComplexUnitType.Sp, (float)Element.FontSize);
 		}
 
-		void UpdateTextColor()
-		{
-			_textColorSwitcher?.UpdateTextColor(EditText, Element.TextColor);
-		}
+
+		internal protected virtual void UpdateTextColor() => UpdateTextColor(Element.TextColor);
+		internal protected void UpdateTextColor(Color color) => _textColorSwitcher.UpdateTextColor(EditText, color);
 	}
 }
