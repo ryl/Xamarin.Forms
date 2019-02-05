@@ -42,9 +42,8 @@ namespace Xamarin.Forms.Platform.Android.Material
 
 	}
 
-	public class MaterialFormsEditText : TextInputEditText, IDescendantFocusToggler, IFormsEditText
+	internal static class MaterialFormsEditTextManager
 	{
-		DescendantFocusToggler _descendantFocusToggler;
 
 		// These paddings are a hack to center the hint
 		// once this issue is resolved we can get rid of these paddings
@@ -54,61 +53,84 @@ namespace Xamarin.Forms.Platform.Android.Material
 		static Thickness _centeredText = new Thickness(16, 8, 12, 27);
 		static Thickness _alignedWithUnderlineText = new Thickness(16, 20, 12, 16);
 
-		public MaterialFormsEditText(Context context) : base(context)
-		{
-			Init();
-		}
-
-		protected MaterialFormsEditText(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-		{
-			Init();
-		}
-
-		public MaterialFormsEditText(Context context, IAttributeSet attrs) : base(context, attrs)
-		{
-			Init();
-		}
-
-		public MaterialFormsEditText(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr)
-		{
-			Init();
-		}
-
-		void Init()
+		public static void Init(TextInputEditText textInputEditText)
 		{
 			VisualElement.VerifyVisualFlagEnabled();
-			UpdatePadding();
+
+			textInputEditText.TextChanged += OnTextChanged;
+			textInputEditText.FocusChange += OnFocusChanged;
 		}
 
-		void UpdatePadding()
+		public static void Dispose(TextInputEditText textInputEditText)
+		{
+			textInputEditText.TextChanged -= OnTextChanged;
+			textInputEditText.FocusChange -= OnFocusChanged;
+		}
+
+		private static void OnFocusChanged(object sender, global::Android.Views.View.FocusChangeEventArgs e)
+		{
+			if (sender is TextInputEditText textInputEditText)
+			{
+				// Delay padding update until after the keyboard has showed up otherwise updating the padding
+				// stops the keyboard from showing up
+				// TODO closure
+				if (e.HasFocus)
+					Device.BeginInvokeOnMainThread(() => UpdatePadding(textInputEditText));
+				else
+					UpdatePadding(textInputEditText);
+			}
+		}
+
+		private static void OnTextChanged(object sender, global::Android.Text.TextChangedEventArgs e)
+		{
+			if (e.BeforeCount == 0 || e.AfterCount == 0)
+				UpdatePadding(sender as TextInputEditText);
+		}
+
+		static void UpdatePadding(TextInputEditText textInputEditText)
 		{
 			Thickness rect = _centeredText;
 
-			if (!String.IsNullOrWhiteSpace(Text) || HasFocus)
+			if (!String.IsNullOrWhiteSpace(textInputEditText.Text) || textInputEditText.HasFocus)
 			{
 				rect = _alignedWithUnderlineText;
 			}
 
-			SetPadding((int)Context.ToPixels(rect.Left), (int)Context.ToPixels(rect.Top), (int)Context.ToPixels(rect.Right), (int)Context.ToPixels(rect.Bottom));
+			Context Context = textInputEditText.Context;
+			textInputEditText.SetPadding((int)Context.ToPixels(rect.Left), (int)Context.ToPixels(rect.Top), (int)Context.ToPixels(rect.Right), (int)Context.ToPixels(rect.Bottom));
+		}
+	}
+
+	public class MaterialFormsEditText : TextInputEditText, IDescendantFocusToggler, IFormsEditText
+	{
+		DescendantFocusToggler _descendantFocusToggler;
+
+		public MaterialFormsEditText(Context context) : base(context)
+		{
+			MaterialFormsEditTextManager.Init(this);
 		}
 
-		protected override void OnTextChanged(Java.Lang.ICharSequence text, int start, int lengthBefore, int lengthAfter)
+		protected MaterialFormsEditText(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
 		{
-			base.OnTextChanged(text, start, lengthBefore, lengthAfter);
-			if (lengthBefore == 0 || lengthAfter == 0)
-				UpdatePadding();
+			MaterialFormsEditTextManager.Init(this);
 		}
 
-		protected override void OnFocusChanged(bool gainFocus, [GeneratedEnum] FocusSearchDirection direction, Rect previouslyFocusedRect)
+		public MaterialFormsEditText(Context context, IAttributeSet attrs) : base(context, attrs)
 		{
-			base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
+			MaterialFormsEditTextManager.Init(this);
+		}
 
-			// Delay padding update until after the keyboard has showed up otherwise updating the padding
-			// stops the keyboard from showing up
-			if (gainFocus)
-				Device.BeginInvokeOnMainThread(() => UpdatePadding());
-			else
-				UpdatePadding();
+		public MaterialFormsEditText(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr)
+		{
+			MaterialFormsEditTextManager.Init(this);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+				MaterialFormsEditTextManager.Dispose(this);
+
+			base.Dispose(disposing);
 		}
 
 		bool IDescendantFocusToggler.RequestFocus(global::Android.Views.View control, Func<bool> baseRequestFocus)

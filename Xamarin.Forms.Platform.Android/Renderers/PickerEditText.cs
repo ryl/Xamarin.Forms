@@ -17,7 +17,7 @@ namespace Xamarin.Forms.Platform.Android
 			Keycode.Tab, Keycode.Forward, Keycode.Back, Keycode.DpadDown, Keycode.DpadLeft, Keycode.DpadRight, Keycode.DpadUp
 		});
 
-		public static void Setup(Context context, EditText editText)
+		public static void Init(Context context, EditText editText)
 		{
 			editText.Focusable = true;
 			editText.Clickable = true;
@@ -30,7 +30,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		static void OnTouchEvent(object sender, AView.TouchEventArgs e)
 		{
-			if (sender is PickerEditText view)
+			if (sender is AView view)
 			{
 				if (e.Event.Action == MotionEventActions.Up && !view.IsFocused)
 				{
@@ -78,11 +78,11 @@ namespace Xamarin.Forms.Platform.Android
 
 			public void OnClick(global::Android.Views.View v)
 			{
-				if (v is PickerEditText picker)
+				if (v is AView picker)
 				{
 					if (picker?.Parent is IPickerRenderer renderer1)
 						renderer1.OnClick();
-					else if (picker?.Parent?.Parent is IPickerRenderer renderer2)
+					else if (picker?.Parent?.Parent?.Parent is IPickerRenderer renderer2)
 						renderer2.OnClick();
 					else
 						throw new System.Exception("Renderer not found temp check for Shane things");
@@ -91,14 +91,13 @@ namespace Xamarin.Forms.Platform.Android
 		}
 	}
 
-
 	public class PickerEditText : EditText, IPopupTrigger
 	{
 		public bool ShowPopupOnFocus { get; set; }
 
 		public PickerEditText(Context context, IPickerRenderer pickerRenderer) : base(context)
 		{
-			PickerEditTextManager.Setup(Context, this);
+			PickerEditTextManager.Init(Context, this);
 		}
 		protected override void Dispose(bool disposing)
 		{

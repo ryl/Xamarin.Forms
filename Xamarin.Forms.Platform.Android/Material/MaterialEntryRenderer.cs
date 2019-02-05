@@ -17,8 +17,8 @@ namespace Xamarin.Forms.Platform.Android.Material
 	public sealed class MaterialEntryRenderer : EntryRendererBase<MaterialFormsTextInputLayout>
 	{
 		bool _disposed;
-		private MaterialFormsEditText _textInputEditText;
-		private MaterialFormsTextInputLayout _textInputLayout;
+		MaterialFormsEditText _textInputEditText;
+		MaterialFormsTextInputLayout _textInputLayout;
 
 		public MaterialEntryRenderer(Context context) :
 			base(MaterialContextThemeWrapper.Create(context))
