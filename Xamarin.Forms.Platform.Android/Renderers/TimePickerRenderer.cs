@@ -10,26 +10,6 @@ using Android.Widget;
 
 namespace Xamarin.Forms.Platform.Android
 {
-
-	public class TimePickerRenderer : TimePickerRendererBase<EditText>
-	{
-		[Obsolete("This constructor is obsolete as of version 2.5. Please use TimePickerRenderer(Context) instead.")]
-		public TimePickerRenderer()
-		{
-		}
-
-		public TimePickerRenderer(Context context) : base(context)
-		{
-		}
-
-		protected override EditText CreateNativeControl()
-		{
-			return new PickerEditText(Context, this);
-		}
-
-		protected override EditText EditText => Control;
-	}
-
 	public abstract class TimePickerRendererBase<TControl> : ViewRenderer<TimePicker, TControl>, TimePickerDialog.IOnTimeSetListener, IPickerRenderer
 		where TControl : global::Android.Views.View
 	{
@@ -167,4 +147,24 @@ namespace Xamarin.Forms.Platform.Android
 		internal protected virtual void UpdateTextColor() => UpdateTextColor(Element.TextColor);
 		internal protected void UpdateTextColor(Color color) => _textColorSwitcher.UpdateTextColor(EditText, color);
 	}
+
+	public class TimePickerRenderer : TimePickerRendererBase<EditText>
+	{
+		[Obsolete("This constructor is obsolete as of version 2.5. Please use TimePickerRenderer(Context) instead.")]
+		public TimePickerRenderer()
+		{
+		}
+
+		public TimePickerRenderer(Context context) : base(context)
+		{
+		}
+
+		protected override EditText CreateNativeControl()
+		{
+			return new PickerEditText(Context, this);
+		}
+
+		protected override EditText EditText => Control;
+	}
+
 }

@@ -151,6 +151,7 @@
     <Compile Include="Material\MaterialFormsEditText.cs" />
     <Compile Include="Material\MaterialButtonRenderer.cs" />
     <Compile Include="Material\MaterialEntryRenderer.cs" />
+    <Compile Include="Material\MaterialDatePickerRenderer.cs" />
     <Compile Include="Material\MaterialTimePickerRenderer.cs" />
     <Compile Include="Material\MaterialProgressBarRenderer.cs" />
     <Compile Include="IPickerRenderer.cs" />
