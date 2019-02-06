@@ -508,6 +508,13 @@ namespace Xamarin.Forms.Controls
 				corePageView.FilterPages(e.NewTextValue);
 			};
 
+			var testButton = new Button
+			{
+				Text = "No Automation ID",
+			};
+			testButton.SetValue(AutomationProperties.NameProperty, "This is a Name Property");
+			testButton.SetValue(AutomationProperties.HelpTextProperty, "This is a HelpTextProperty.");
+
 			var testCasesButton = new Button
 			{
 				Text = "Go to Test Cases",
@@ -520,10 +527,13 @@ namespace Xamarin.Forms.Controls
 						await Navigation.PushModalAsync(TestCases.GetTestCases());
 				})
 			};
+			testCasesButton.SetValue(AutomationProperties.NameProperty, "This is a Name Property");
+			testCasesButton.SetValue(AutomationProperties.HelpTextProperty, "This is a HelpTextProperty.");
 
 			var stackLayout = new StackLayout()
 			{
 				Children = {
+					testButton,
 					testCasesButton,
 					searchBar,
 					new Button {

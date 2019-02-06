@@ -55,6 +55,17 @@ namespace Xamarin.Forms.Platform.Android.FastRenderers
 				defaultContentDescription = control.ContentDescription;
 
 			string value = ConcatenateNameAndHelpText(element);
+
+			var button = element as Button;
+			if (button != null)
+			{
+				var viewGroup = control as global::Android.Views.ViewGroup;
+				if (viewGroup != null)
+				{
+					control = viewGroup.GetChildAt(0);
+				}
+			}
+
 			control.ContentDescription = !string.IsNullOrWhiteSpace(value) ? value : defaultContentDescription;
 		}
 
